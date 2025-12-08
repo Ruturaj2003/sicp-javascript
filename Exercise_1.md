@@ -190,7 +190,7 @@ the ternary operator returns **one of two functions**.
 
 First, the condition is evaluated.
 Then, **the selected function is applied** to `a` and `b`.
----
+
 This is how the function always returns the **absolute value effect** without using any built-in function like `Math.abs`.
  
  ---
