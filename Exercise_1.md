@@ -1,9 +1,6 @@
 ### Exercise 1.1
 
-#### Below is a sequence of statements. What is the result printed by the interpreter in response
-
-to each statement? Assume that the sequence is to be evaluated in the order in which it is
-presented.
+ **Below is a sequence of statements. What is the result printed by the interpreter in response to each statement? Assume that the sequence is to be evaluated in the order in which it is presented.**
 
 ```js
 10;
@@ -65,4 +62,41 @@ a === 4
 
 **Result:** `16`
 
+```js
+2 + (b > a ? b : a);
+```
+
+**Result:** `6`
+
+```js
+(a > b
+  ? a
+  : a < b
+  ? b
+  : -1)
+*
+(a + 1);
+```
+
+**Result:** `16`
+
 ---
+
+### Exercise 1.2
+
+**Translate the following expression into JavaScript**  
+*(Original math equation I couldn't copy)*
+
+**Result:**
+```js
+(5 + 4 + (2 - (3 - (6 + 4 / 5))))
+/
+(3 * (6 - 2) * (2 - 7));
+```
+
+
+
+
+
+
+
