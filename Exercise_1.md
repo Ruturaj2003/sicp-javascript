@@ -93,7 +93,32 @@ a === 4
 /
 (3 * (6 - 2) * (2 - 7));
 ```
+---
 
+### Exercise 1.3
+
+**Declare a function that takes three numbers as arguments and returns the sum of the squares  
+of the two larger numbers**
+
+```js
+function sumOfSqrOfG2(
+  num1,
+  num2,
+  num3
+) {
+  const lowestNum =
+    num1 < num2
+      ? (num1 < num3 ? num1 : num3)
+      : (num2 < num3 ? num2 : num3);
+
+  const result =
+    num1 * num1 +
+    num2 * num2 +
+    num3 * num3 -
+    (lowestNum * lowestNum);
+
+  return Result;
+}
 
 
 
