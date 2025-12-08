@@ -123,5 +123,59 @@ function sumOfSqrOfG2(
 
 
 
+````md
+### Explanation of `a_plus_abs_b` Function Behavior
+
+The function `a_plus_abs_b` works by choosing which function to use—either **addition** or **subtraction**—based on whether `b` is positive or negative. Instead of using multiple `if` statements, it uses the **ternary operator (conditional expression)** to select a function first (the function name is chosen, then combined with the later part and invoked with `a` and `b`).
+
+- If `b` is positive → result is `a + b`
+- If `b` is negative → result is `a - (-b)`
+
+---
+
+### What I Learned
+
+#### 1. Functions Can Be Treated Like Values  
+A function is not a “special” thing—it behaves just like a number or a string.
+
+For example, just like you can:
+- Store a number in a variable  
+- Pass a number to another function  
+- Return a number from a function  
+
+You can do the **same with functions**:
+- Store a function in a variable  
+- Pass a function as an argument  
+- Return a function from another function  
+
+---
+
+#### 2. A Conditional Expression (Ternary Operator) Can Return a Function  
+This is something I’ve actually used a lot in React:
+
+```js
+isLoggedIn ? CompA : CompB
+````
+
+Since React components are basically functions, this is the same idea:
+the ternary operator returns **one of two functions**.
+
+---
+
+#### 3. The Chosen Function Is Applied Only After the Condition Is Evaluated
+
+First, the condition is evaluated.
+Then, **the selected function is applied** to `a` and `b`.
+
+---
+
+### Final Insight
+
+This is how the function always returns the **absolute value effect** without using any built-in function like `Math.abs`.
+
+```
+```
+
+
 
 
