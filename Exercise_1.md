@@ -195,3 +195,82 @@ This is how the function always returns the **absolute value effect** without us
  
  ---
 
+
+
+## Exercise 1.5
+
+Ben Bitdiddle has invented a test to determine whether the interpreter he is faced with is
+using **applicative-order evaluation** or **normal-order evaluation**. He declares the following
+two functions:
+
+```js
+function p() {
+  return p();
+}
+
+function test(x, y) {
+  return x === 0 ? 0 : y;
+}
+```
+
+Then he evaluates the statement:
+
+```js
+test(0, p());
+```
+
+### Questions
+
+* What behavior will Ben observe with an interpreter that uses **applicative-order evaluation**?
+* What behavior will he observe with an interpreter that uses **normal-order evaluation**?
+
+Explain your answer.
+
+*(Assume that the evaluation rule for conditional expressions is the standard one.)*
+
+
+#### **Solution**
+
+This exercise shows the difference between **applicative-order evaluation** and **normal-order evaluation**.
+
+##### **Applicative-Order Evaluation (what JavaScript uses)**
+
+In applicative order, the interpreter **evaluates all arguments before calling the function**.
+
+So when evaluating:
+
+* `test(0, p())`
+
+The interpreter will:
+
+1. Try to evaluate `0` → this is fine.
+2. Then try to evaluate `p()` **before** entering `test`.
+3. But `p()` calls itself forever and never returns.
+
+So the program gets **stuck in an infinite loop** and never reaches the `test` function body.
+
+**Result:** Infinite loop (program never finishes).
+
+
+##### **Normal-Order Evaluation**
+
+In normal order, the interpreter **does NOT evaluate arguments first**. It substitutes them into the function body and only evaluates them if they are actually needed.
+
+So for:
+
+* `test(0, p())`
+
+The interpreter:
+
+1. Enters the function body first.
+2. Checks the condition: `x === 0` → this is true.
+3. Since the condition is true, it immediately returns `0`.
+4. The expression `p()` is **never evaluated**.
+
+**Result:** The program returns `0` with no infinite loop.
+
+---
+
+
+
+
