@@ -197,7 +197,7 @@ This is how the function always returns the **absolute value effect** without us
 
 
 
-## Exercise 1.5
+### Exercise 1.5
 
 Ben Bitdiddle has invented a test to determine whether the interpreter he is faced with is
 using **applicative-order evaluation** or **normal-order evaluation**. He declares the following
@@ -271,6 +271,13 @@ The interpreter:
 
 ---
 
+
+### Exercise 1.6
+
+
+
+
+---
 ### Exercise 1.7
 
 The `is_good_enough` test used in computing square roots is not very effective for finding the square roots of **very small numbers**. Also, in real computers, arithmetic operations are almost always performed with **limited precision**. This makes our test inadequate for **very large numbers** as well.
@@ -431,6 +438,14 @@ This improved method:
 * Automatically **adapts to the scale of the number**
 * Uses a **dynamic threshold** instead of a fixed constant
 
+PS: 
+
+One might think like I did that , we can just impore it by old_guess  -  new_guess < .001 , which means it should be accurate to 3 decimal places and think that 0.001 means the same for all numbers but if we take a example 
+
+* For 0.01, an error of 0.001 = 10% error
+* For 3000, an error of 0.001 = 0.000033% error
+
+By this we understand how flawed our static logic was.
 
 
 
