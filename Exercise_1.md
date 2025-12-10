@@ -274,6 +274,174 @@ The interpreter:
 
 ### Exercise 1.6
 
+Alyssa P. Hacker doesn’t like the syntax of conditional expressions involving the characters `?` and `:`. She asks:
+
+> “Why can’t I just declare an ordinary conditional function whose application works just like conditional expressions?”
+
+Her friend Eva Lu Ator claims this can indeed be done and declares the following conditional function:
+
+```js
+function conditional(predicate, then_clause, else_clause) {
+  return predicate ? then_clause : else_clause;
+}
+```
+
+Eva demonstrates the program:
+
+```js
+conditional(2 === 3, 0, 5);
+// 5
+
+conditional(1 === 1, 0, 5);
+// 0
+```
+
+Delighted, Alyssa rewrites the square-root program as follows:
+
+```js
+function sqrt_iter(guess, x) {
+  return conditional(
+    is_good_enough(guess, x),
+    guess,
+    sqrt_iter(improve(guess, x), x)
+  );
+}
+```
+
+#### Question
+
+What happens when Alyssa attempts to use this to compute square roots? Explain.
+
+---
+
+#### Answer
+
+When Alyssa replaces the built-in conditional expression with the `conditional` function, the square-root program goes into **infinite recursion** and never returns a result.
+
+---
+
+#### Why This Happens
+
+JavaScript uses **applicative-order evaluation**, which means:
+
+> **All function arguments are evaluated before the function itself is called.**
+
+So this call:
+
+```js
+conditional(
+  is_good_enough(guess, x),
+  guess,
+  sqrt_iter(improve(guess, x), x)
+)
+```
+
+is evaluated by JavaScript in this order:
+
+1. `is_good_enough(guess, x)`
+2. `guess`
+3. `sqrt_iter(improve(guess, x), x)`  ← the recursive call is evaluated immediately
+
+The critical problem is step 3. The recursive call is **executed before** `conditional` gets a chance to choose between the `then` and `else` branches.
+
+---
+
+#### Key Insight (In Simple Words)
+
+Consider this general form:
+
+```js
+conditional(param1, param2, param3)
+```
+
+In Alyssa’s version:
+
+* `param1` is a function call
+* `param3` is also a function call (`sqrt_iter(...)`)
+
+This means JavaScript is **not passing a function reference** — it is executing the function immediately.
+
+If Alyssa had passed only a reference such as `sqrt_iter`, that would be safe. But instead, she passed:
+
+```js
+sqrt_iter(improve(guess, x), x)
+```
+
+which **runs instantly**.
+
+So when `conditional` is called:
+
+* The recursion has **already started**
+* The condition has **no control** over whether recursion should happen
+
+---
+
+#### Consequences
+
+* Even when `is_good_enough(guess, x)` becomes `true`
+* The recursive call has already been forced to execute
+* The function keeps calling itself forever
+* The program never terminates
+
+This happens even if the initial guess is already correct.
+
+---
+
+## Why a Real `if` Works but `conditional` Fails
+
+A real `if` expression is a **special form**, not an ordinary function.
+
+It works like this:
+
+* First, it evaluates the condition
+* Then, it evaluates **only one branch**
+* The unused branch is **never evaluated**
+
+But `conditional` is a **normal function**, so:
+
+* JavaScript **must evaluate all arguments first**
+* It **cannot delay execution** of either branch
+* Therefore, it **cannot safely replace `if` in a recursive program**
+
+---
+
+#### How to Fix It (Correct Solution)
+
+The real problem is **eager evaluation**. The fix is to **delay execution** by wrapping both branches in functions.
+
+#### Fixed `conditional`
+
+```js
+function conditional(predicate, then_clause, else_clause) {
+  return predicate ? then_clause() : else_clause();
+}
+```
+
+#### Fixed `sqrt_iter`
+
+```js
+function sqrt_iter(guess, x) {
+  return conditional(
+    is_good_enough(guess, x),
+    () => guess,
+    () => sqrt_iter(improve(guess, x), x)
+  );
+}
+```
+
+---
+
+#### Why This Version Works
+
+Now JavaScript sees:
+
+* `() => guess` as a **function reference**
+* `() => sqrt_iter(...)` as a **function reference**
+
+Nothing is executed immediately. Only **after** `predicate` is evaluated does `conditional` decide **which function to execute**.
+
+This restores the correct behavior of a real conditional expression.
+
 
 
 
