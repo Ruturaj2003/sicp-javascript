@@ -134,3 +134,154 @@ This is an implementation issue, not a theory issue.
 > Tail recursion differs from normal recursion in that the recursive call is the final operation, leaving no pending work, which allows the process to run in constant space.
 
 ---
+
+Yes — you’ve got it.
+Let me tighten it and place it correctly in the SICP mental model.
+
+---
+
+## The big idea (short and correct)
+
+> **Linear recursive**, **linear iterative**, and **tree recursive** are
+> **patterns of computation (processes)** — not code styles.
+
+Same language. Same syntax.
+Different **shapes of work**.
+
+---
+
+## 1️⃣ Linear Recursive Process
+
+**Shape:** one chain down, then work on the way back up
+
+**Key trait:** deferred operations
+
+Example shape:
+
+```
+f(n) → f(n−1) → f(n−2) → ... → f(0)
+           ↑      ↑
+         work happens here
+```
+
+Characteristics:
+
+* Grows call stack
+* Uses O(n) space
+* Clear structure, dangerous at scale
+
+Example (conceptual):
+
+```js
+return 1 + f(n - 1);
+```
+
+---
+
+## 2️⃣ Linear Iterative Process
+
+**Shape:** one step at a time, no buildup
+
+**Key trait:** no deferred work
+
+Example shape:
+
+```
+state₀ → state₁ → state₂ → ... → stateₙ
+```
+
+Characteristics:
+
+* Constant space
+* System-friendly
+* Same logic, different process
+
+Example (conceptual):
+
+```js
+return f(n - 1, acc + 1);
+```
+
+---
+
+## 3️⃣ Tree Recursive Process
+
+**Shape:** branches at each step
+
+**Key trait:** work multiplies
+
+Example shape:
+
+```
+        f(5)
+       /    \
+    f(4)   f(3)
+    /  \     ...
+ f(3) f(2)
+```
+
+Characteristics:
+
+* Explodes fast
+* Recomputes the same values
+* Often exponential time
+
+Classic example:
+
+```js
+fib(n) = fib(n - 1) + fib(n - 2);
+```
+
+---
+
+## How Ackermann fits into this (ex 1.10)
+
+Ackermann is **worse than tree recursion**:
+
+* recursion inside recursion
+* depth grows while branching grows
+* no sharing of results
+
+It’s a stress test for the idea of **process growth**.
+
+---
+
+## Why SICP separates these ideas
+
+Because:
+
+> **Same recursive code ≠ same computational cost**
+
+SICP wants you to stop asking:
+
+> “Is this recursive?”
+
+And start asking:
+
+> “What process does this generate?”
+
+---
+
+## One clean mental summary
+
+```
+Linear recursive  → stack grows
+Linear iterative  → state evolves
+Tree recursive    → work explodes
+Ackermann         → growth without brakes
+```
+
+---
+
+## Engineer takeaway (this is the real win)
+
+Before writing code, ask:
+
+* Does this defer work?
+* Does it branch?
+* Does it recompute?
+* Does it scale?
+
+If you can answer those, you’re thinking like a system designer — not a syntax user.
+
+Yes — you’re placing the pieces exactly where they belong now.
